@@ -87,8 +87,8 @@ export const AudioPlayer = ({ audioUrl, onComplete }: AudioPlayerProps) => {
 };
 
 // Helper function to format time in MM:SS
-const formatTime = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
+// const formatTime = (seconds: number): string => {
+//   const mins = Math.floor(seconds / 60);
+//   const secs = Math.floor(seconds % 60);
+//   return `${mins}:${secs.toString().padStart(2, '0')}`;
+// };

@@ -4,7 +4,7 @@ import { tracks } from './data/tracks';
 import { MobileLayout } from './components/layout/MobileLayout';
 import { DesktopLayout } from './components/layout/DesktopLayout';
 import { LayoutTransition } from './components/layout/LayoutTransition';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 function App() {
   const isMobile = useMediaQuery('(max-width: 768px)');

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react"
+import { useRef, useState, useEffect, useLayoutEffect, useCallback } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import {
   motion,
@@ -6,11 +6,9 @@ import {
   useTransform,
   useSpring
 } from "framer-motion"
-import { tracks } from "../../data/tracks";
-import { TrackDisplay } from "../common/TrackDisplay";
 
 export const SmoothScroll = () => {
-  const containerRef = useRef<HTMLDivElement>(null)
+  // const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const ghostRef = useRef<HTMLDivElement>(null)
   const [scrollRange, setScrollRange] = useState(0)
@@ -41,7 +39,7 @@ export const SmoothScroll = () => {
     console.log("spring");
   }, [viewportW]);
 
-  const { scrollY, scrollYProgress } = useScroll({
+  const { scrollY } = useScroll({
     target: scrollRef,
     offset: ["start start", "end end"]
   });

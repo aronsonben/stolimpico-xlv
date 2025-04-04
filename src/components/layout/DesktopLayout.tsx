@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { tracks, albumArt } from '../../data/tracks';
+import { albumArt } from '../../data/tracks';
 import { HorizontalScroll } from '../desktop/HorizontalScroll';
 import { TrackInfoLinks } from "../common/TrackInfoLinks";
 import '../../styles/components.css';

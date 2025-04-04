@@ -1,5 +1,5 @@
-import { motion, useScroll, useAnimate, useTransform } from "framer-motion";
-import { useRef, useLayoutEffect, useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useLayoutEffect, useState } from "react";
 import { tracks } from "../../data/tracks";
 import { TrackDisplay } from "../common/TrackDisplay";
 
