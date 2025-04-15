@@ -5,6 +5,7 @@ import { Track } from '../../types';
 import { TrackInfoLinks } from './TrackInfoLinks';
 import { LinkIcon } from './LinkIcon';
 import { formatTime } from '@/utils/timeFormat';
+import '../../index.css';
 
 interface TrackDisplayProps {
   track: Track;
@@ -21,7 +22,7 @@ interface YouTubeProps {
 const YouTube: React.FC<YouTubeProps> = ({ videoId, title, className }) => {
   return (
     <div id="youtube-round-embed-wrap" className={`relative aspect-square overflow-hidden rounded-full h-[280px] ${className}`}>
-      <div id="youtube-round-embed" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] overflow-hidden">
+      <div id="youtube-round-embed" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[225%] h-[200%] overflow-hidden">
         <iframe
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full"
           src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
@@ -64,6 +65,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
   const [audioPosition, setAudioPosition] = useState(0);
   const frameRef = useRef<number>()
   const seekbarRef = useRef<HTMLDivElement>(null);
+  const youtubeID = track.youtubeLink.split('v=')[1];
 
   useEffect(() => {
     const animate = () => {
@@ -124,9 +126,9 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
           <div className="relative w-full">
             {isMobile ? (
               <YouTube 
-                videoId="A-OwYdNIfrw"
+                videoId={youtubeID}
                 title="YouTube video player"
-                className="w-full rounded-full max-w-[400px] max-h-[280px] mx-auto shadow-lg"
+                className="w-full rounded-full max-w-[290px] max-h-[280px] mx-auto shadow-lg"
               />
             ) : (
               <motion.img
@@ -213,9 +215,11 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
         {(track.id == 99) && (
           <TrackInfoLinks />
         )}
-        <div className="w-full h-16 text-2xl text-center flex items-center justify-center font-bold">
+        {(track.id != 99) && (
+        <div id="mobile-title-text" className="w-full h-16 text-4xl text-center flex items-center justify-center font-bold font-['Modia'] uppercase">
           <h2>{track.title}</h2>
         </div>
+        )}
         {/* BEN Audio Player */}
         {(!isMobile && track.id != 99) && (
           <div id="track-player" className="mt-4">

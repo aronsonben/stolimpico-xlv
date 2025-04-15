@@ -2,6 +2,8 @@
 export default {
   content: [
     "./index.html",
+		"./public/**/*.otf",
+		"./src/index.css",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
@@ -53,7 +55,8 @@ export default {
   				'Inter',
   				'system-ui',
   				'sans-serif'
-  			]
+  			],
+				felten: ['FeltenShaded', 'system-ui', 'sans-serif'],
   		},
   		animation: {
   			float: 'float 6s ease-in-out infinite',

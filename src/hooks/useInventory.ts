@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Track } from '../types';
-import { allTracks } from '../data/tracks';
 
 export interface CollectedItem {
   trackId: number;
@@ -33,6 +32,10 @@ export const useInventory = () => {
     return collectedItems.some(item => item.trackId === trackId);
   };
 
+  const hasAll = (): boolean => {
+    return collectedItems.length === 4;
+  }
+
   /** Adds a new track to the inventory via localStorage */
   const addToInventory = (track: Track) => {
     if (!hasCollected(track.id)) {
@@ -46,14 +49,6 @@ export const useInventory = () => {
 
   /** Ben Functions ***** */
 
-  /** (needed???) Returns a list of all potential inventory */
-  const getPotentialInventory = (): CollectedItem[] => {
-    return allTracks.map(track => ({
-      trackId: track.id,
-      imagePath: track.collectibleImage
-    }));
-  }
-
   /** Clears the inventory */
   const clearInventory = () => {
     setCollectedItems([]);
@@ -61,9 +56,9 @@ export const useInventory = () => {
 
   return {
     addToInventory,
+    hasAll,
     hasCollected,
     getInventory,
-    getPotentialInventory,
     clearInventory,
     collectedItems
   };

@@ -16,7 +16,7 @@ interface TrackCarouselProps {
 
 export const TrackCarousel = ({ tracks, onCollect, hasCollected, toggleDrawer }: TrackCarouselProps) => {
   return (
-    <Carousel id="carousel" className="w-full max-w-xs" opts={{ align: "center", "loop": true}}>
+    <Carousel id="carousel" className="w-full" opts={{ align: "center", "loop": true}}>
       <CarouselContent id="carousel-content">
         {tracks.map((currentTrack, index) => (
           <CarouselItem key={index} id="carousel-item" className="flex flex-col justify-center">

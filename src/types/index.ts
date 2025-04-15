@@ -4,4 +4,5 @@ export interface Track {
   audioFile: string;
   coverArt: string;
   collectibleImage: string;
+  youtubeLink: string;
 }
