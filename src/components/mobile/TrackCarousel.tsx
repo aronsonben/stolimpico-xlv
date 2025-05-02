@@ -17,7 +17,7 @@ interface TrackCarouselProps {
   toggleDrawer: () => void;
 }
 
-export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCollected, clearListenRecord, toggleDrawer }: TrackCarouselProps) => {
+export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCollected, toggleDrawer }: TrackCarouselProps) => {
   return (
     <Carousel id="track-carousel-wrap" className="w-full" opts={{ align: "center", "loop": true}}>
       <CarouselContent id="carousel-content">

@@ -5,7 +5,7 @@ import { Track } from '../../types';
 import { TrackInfoLinks } from './TrackInfoLinks';
 import { LinkIcon } from './LinkIcon';
 import { YouTube } from '../youtube';
-import { ProgressBar } from '../ui/progress-bar';
+// import { ProgressBar } from '../ui/progress-bar';
 import { formatTime } from '@/utils/timeFormat';
 import '../../index.css';
 
@@ -89,7 +89,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
     // Trigger video playback using the YouTube Player API
     const iframe = document.getElementById(`youtube-iframe-${youtubeID}`) as HTMLIFrameElement;
     if (iframe && (window as any).YT) {
-      const player = new (window as any).YT.Player(iframe, {
+      new (window as any).YT.Player(iframe, {
         events: {
           onReady: (event: any) => event.target.playVideo(),
         },

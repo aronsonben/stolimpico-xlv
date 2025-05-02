@@ -85,10 +85,12 @@ export const HorizontalScroll = () => {
             style={{ opacity }}
           >
             <TrackDisplay 
-              toggleDrawer={() => {}}
+              toggleDrawer={() => { } }
               track={track}
-              isMobile={false}
-            />
+              isMobile={false} 
+              onListen={function (): void {
+                throw new Error("Function not implemented.");
+              } }            />
           </motion.div>
         ))}
       </motion.div>

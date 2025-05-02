@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import styled from "styled-components";
 
@@ -37,7 +37,6 @@ export interface ProgressBarProps {
 
 export const ProgressBar = ({
   percents,
-  caption,
   duration = 3,
   delay = 0.5,
   easing = "easeInOut", // [number, number, number, number] | "linear" | "easeIn" | "easeOut" | "easeInOut" | "circIn" | "circOut" | "circInOut" | "backIn" | "backOut" | "backInOut" | "anticipate" | EasingFunction;

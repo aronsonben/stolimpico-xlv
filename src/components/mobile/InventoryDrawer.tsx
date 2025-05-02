@@ -32,7 +32,7 @@ export const InventoryItem = ({ track, hasCollected }: { track: Track; hasCollec
   );
 }
 
-export const InventoryDrawer = ({ show, inventory, hasCollected, clearInventory }: InventoryDrawerProps) => {
+export const InventoryDrawer = ({ show, inventory, hasCollected }: InventoryDrawerProps) => {
   // temp solution to hide the first inventory item, which was intended for the full project
   const inventoryMinusFirst = inventory.slice(1);
 
