@@ -4,39 +4,10 @@ import { useAudioPlayer } from "react-use-audio-player";
 import { Track } from '../../types';
 import { TrackInfoLinks } from './TrackInfoLinks';
 import { LinkIcon } from './LinkIcon';
+import { YouTube } from '../youtube';
+import { ProgressBar } from '../ui/progress-bar';
 import { formatTime } from '@/utils/timeFormat';
 import '../../index.css';
-
-interface TrackDisplayProps {
-  track: Track;
-  isMobile: boolean;
-  toggleDrawer: () => void;
-}
-
-interface YouTubeProps {
-  videoId: string;
-  title: string;
-  className?: string;
-}
-
-const YouTube: React.FC<YouTubeProps> = ({ videoId, title, className }) => {
-  return (
-    <div id="youtube-round-embed-wrap" className={`relative aspect-square overflow-hidden rounded-full h-[280px] ${className}`}>
-      <div id="youtube-round-embed" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[225%] h-[200%] overflow-hidden">
-        <iframe
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="strict-origin-when-cross-origin"
-        />
-      </div>
-    </div>
-  );
-};
-
 
 const CoverArt = ({ src, alt }: { src: string; alt: string }) => (
   <>
@@ -60,13 +31,32 @@ const TrackTimeTracker = ({ audioPosition, duration }: { audioPosition: number; 
   </div>
 )
 
-export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProps) => {
+interface TrackDisplayProps {
+  track: Track;
+  isMobile: boolean;
+  toggleDrawer: () => void;
+  onListen: () => void;
+}
+
+export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackDisplayProps) => {
   const { togglePlayPause, seek, getPosition, play, pause, isPlaying, duration } = useAudioPlayer(track.audioFile);
   const [audioPosition, setAudioPosition] = useState(0);
   const frameRef = useRef<number>()
   const seekbarRef = useRef<HTMLDivElement>(null);
   const youtubeID = track.youtubeLink.split('v=')[1];
+  const [overlayActive, setOverlayActive] = useState(true);
 
+  /** useEffect to Load the YouTube Player API script if not already loaded */
+  useEffect(() => {
+    if (!document.getElementById("youtube-player-api")) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      tag.id = "youtube-player-api";
+      document.body.appendChild(tag);
+    }
+  }, []);
+
+  /** useEffect to handle audio position of AudioPlayer, when in use */
   useEffect(() => {
     const animate = () => {
       setAudioPosition(getPosition())
@@ -81,6 +71,31 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
       }
     }
   }, [getPosition])
+
+
+  /** Handler function that waits 1 second before allowing use to claim reward */
+  const handleRecordPlayClick = () => {
+    console.log("Track listened to:", track.title);
+    // Wait for 1 second, then mark the track as listened
+    setTimeout(() => {
+      onListen();
+    }, 1000);
+  }
+
+  const handleOverlayClick = () => {
+    handleRecordPlayClick(); // Call the function to mark the track as listened
+    setOverlayActive(false); // Disable the overlay after the first click
+
+    // Trigger video playback using the YouTube Player API
+    const iframe = document.getElementById(`youtube-iframe-${youtubeID}`) as HTMLIFrameElement;
+    if (iframe && (window as any).YT) {
+      const player = new (window as any).YT.Player(iframe, {
+        events: {
+          onReady: (event: any) => event.target.playVideo(),
+        },
+      });
+    }
+  };
 
   // Code borrowed from react-use-audio-player repo (AudioSeekBar.tsx)
   const goTo = useCallback(
@@ -104,6 +119,15 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
   }
 
   const handleLeave = () => {
+    // Trigger video playback using the YouTube Player API
+    const iframe = document.getElementById(`youtube-iframe-${youtubeID}`) as HTMLIFrameElement;
+    if (iframe && (window as any).YT) {
+      const player = (window as any).YT.get(iframe.id);
+      if (player && typeof player.pauseVideo === 'function') {
+        player.pauseVideo(); // Pause the video when leaving
+      }
+    }
+
     track.id == 99 ? toggleDrawer() : null;
     pause(); // pause track on leaving
   }
@@ -128,33 +152,25 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
               <YouTube 
                 videoId={youtubeID}
                 title="YouTube video player"
+                overlayActive={overlayActive}
+                onOverlayClick={handleOverlayClick}
                 className="w-full rounded-full max-w-[290px] max-h-[280px] mx-auto shadow-lg"
               />
             ) : (
               <motion.img
-                id="cover-art-img"
-                src={track.coverArt}
-                alt={`Artwork for ${track.title}`}
-                className="w-full rounded-full md:rounded-none shadow-2xl"
-                initial={{ rotate: 0 }}
-                whileInView={{ 
-                  rotate: (isMobile ? 360 : 0),
-                  transition: isMobile ? { duration: 200, repeat: Infinity, ease: [.17,.67,.83,.67] } : {}
-                }}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+              id="cover-art-img"
+              src={track.coverArt}
+              alt={`Artwork for ${track.title}`}
+              className="w-full rounded-full md:rounded-none shadow-2xl"
+              initial={{ rotate: 0 }}
+              whileInView={{ 
+                rotate: (isMobile ? 360 : 0),
+                transition: isMobile ? { duration: 200, repeat: Infinity, ease: [.17,.67,.83,.67] } : {}
+              }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
               />
             )}
-            {/* {isMobile && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button 
-                  className="w-28 h-28 rounded-full bg-[#cbcbcbba] text-black flex items-center justify-center text-xl"
-                  onClick={togglePlayPause}
-                >
-                  {isPlaying ? '⏸' : '▶'}
-                </button>
-              </div>
-            )} */}
           </div>
           {/* Mobile Audio Progress Bar */}
           {/* {isMobile && (
@@ -178,6 +194,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
 
       {/* Track Info */}
       <div id="track-info-wrap" className="w-full md:w-1/2 md:pl-8 md:flex md:flex-col md:gap-8">
+        {/* Desktop - All Tracks (Except Album)  */}
         {!isMobile && track.id != 99 && (
           <div className="w-full">
             <motion.h2 
@@ -190,6 +207,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
             </motion.h2>
           </div>
         )}
+        {/* Desktop - Full Album Only */}
         {!isMobile && track.id != 99 && (
           <div className="grid grid-cols-3 gap-4">
             <LinkIcon 
@@ -212,15 +230,17 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer }: TrackDisplayProp
             />
           </div>
         )}
+        {/* Mobile - Album Only */}
         {(track.id == 99) && (
           <TrackInfoLinks />
         )}
+        {/* Mobile - All Tracks Except Album */}
         {(track.id != 99) && (
-        <div id="mobile-title-text" className="w-full h-16 text-4xl text-center flex items-center justify-center font-bold font-['Modia'] uppercase">
+        <div id="mobile-title-text" className="w-full h-8 text-4xl text-center flex items-center justify-center font-bold font-sans scale-y-50 text-gray-100 uppercase">
           <h2>{track.title}</h2>
         </div>
         )}
-        {/* BEN Audio Player */}
+        {/* BEN Audio Player - only visible on Desktop - All Tracks*/}
         {(!isMobile && track.id != 99) && (
           <div id="track-player" className="mt-4">
             <div className="flex gap-4 justify-between items-center bg-gray-800 rounded-lg p-4">

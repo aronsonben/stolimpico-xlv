@@ -17,7 +17,9 @@ export const InventoryItem = ({ track, hasCollected }: { track: Track; hasCollec
             : ''
         }`}
     >
-      <img 
+      <motion.img 
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.90 }}
         className={`w-full h-full rounded-full ${
           hasCollected(track.id) 
             ? 'brightness-100' 
@@ -36,7 +38,7 @@ export const InventoryDrawer = ({ show, inventory, hasCollected, clearInventory 
 
   return (
     <motion.div id="inventory-drawer" 
-      className="flex flex-col w-full p-4 border-t-4 border-[#454f5c] border-ridge" 
+      className="flex flex-col w-full p-4 border-t-4 border-[#454f5c] border-ridge fixed bottom-0 max-h-screen overflow-y-auto" 
       style={{ display: show ? 'flex' : 'none' }}
       initial={{ opacity: 0, y: show ? 100 : 0 }}
       animate={{ opacity: 1, y: show ? 0 : 100 }}
@@ -48,11 +50,11 @@ export const InventoryDrawer = ({ show, inventory, hasCollected, clearInventory 
           <InventoryItem key={index} track={track} hasCollected={hasCollected} />
         ))}
       </div>
-      {process.env.NODE_ENV === 'development' && (
+      {/* {process.env.NODE_ENV === 'development' && (
         <button onClick={clearInventory} className="text-white text-xs bg-slate-400">
           Clear Inventory
         </button>
-      )}
+      )} */}
     </motion.div>
   );
 };

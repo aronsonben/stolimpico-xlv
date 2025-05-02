@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 import { Switch } from "radix-ui";
 import { useState, useEffect, useRef } from "react";
 import { Track } from "../../types";
@@ -8,6 +9,7 @@ interface CollectProps {
   track: Track;
   onCollect: (track: Track) => void;
   hasCollected: (trackId: number) => boolean;
+  hasListened: () => boolean;
 }
 
 const StyledThumb = styled(Switch.Thumb)<{ $containerWidth: number }>`
@@ -25,8 +27,8 @@ const StyledThumb = styled(Switch.Thumb)<{ $containerWidth: number }>`
 	}
 `;
 
-export const Collect = ({ track, onCollect, hasCollected }: CollectProps) => {
-  const [text, setText] = useState(hasCollected(track.id) ? "claimed" : "tap to claim");
+export const Collect = ({ track, onCollect, hasCollected, hasListened }: CollectProps) => {
+  const [text, setText] = useState(hasListened() ? (hasCollected(track.id) ? "claimed" : "tap to claim") : "listen to claim");
   const [containerWidth, setContainerWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -43,13 +45,35 @@ export const Collect = ({ track, onCollect, hasCollected }: CollectProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (hasCollected(track.id)) {
+      setText("claimed");
+    } else if (hasListened()) {
+      setText("tap to claim");
+    } else {
+      setText("listen to claim");
+    }
+  }, [track.id, hasCollected, hasListened]);
+
   const handleCheckedChange = (checked: boolean) => {
     onCollect(track);
     setText(checked ? "claimed" : "tap to claim");
   };
 
+  const textVariants = {
+    initial: { opacity: 0},
+    animate: { opacity: 1},
+    exit: { opacity: 0}
+  };
+
   return (
-    <div id="claim-wrapper" ref={wrapperRef} className="flex justify-center px-4 items-center md:justify-start">
+    <div
+      id="claim-wrapper"
+      ref={wrapperRef}
+      className={`flex justify-center px-4 items-center md:justify-start ${
+        !hasListened() ? "opacity-50 pointer-events-none" : ""
+      }`}
+    >
       <div id="claim-collectible" className="flex my-4 h-12 w-full bg-slate-800 rounded-lg justify-center md:justify-start">
         <Switch.Root
           className="CollectSwitch"
@@ -58,7 +82,19 @@ export const Collect = ({ track, onCollect, hasCollected }: CollectProps) => {
           disabled={hasCollected(track.id)}
         >
           <StyledThumb $containerWidth={containerWidth} />
-          <p className="CollectText">{text.toUpperCase()}</p>
+            <AnimatePresence mode="wait">
+              <motion.p 
+                key={text}
+                className="CollectText"
+                variants={textVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.3 }}
+              >
+                {text.toUpperCase()}
+              </motion.p>
+            </AnimatePresence>
         </Switch.Root>
       </div>
     </div>

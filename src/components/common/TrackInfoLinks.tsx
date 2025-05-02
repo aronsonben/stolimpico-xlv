@@ -34,6 +34,7 @@ export const TrackInfoLinks = () => (
       animate={{ x: 0, opacity: 1 }}
       transition={{ delay: 0.2 }}
     >
+      {/* Add border on mobile if I want: rounded-lg py-8 px-4 border-solid border-[#80808040] */}
       {IconLinks.map((link) => (
         <LinkIcon 
           key={link.id}

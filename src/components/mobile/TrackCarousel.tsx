@@ -9,14 +9,17 @@ import Collect from "../ui/collect";
 
 interface TrackCarouselProps {
   tracks: Track[];
+  onListen: (track: Track) => void;
   onCollect: (track: Track) => void;
+  hasListened: (trackId: number) => boolean;
   hasCollected: (trackId: number) => boolean;
+  clearListenRecord: () => void;
   toggleDrawer: () => void;
 }
 
-export const TrackCarousel = ({ tracks, onCollect, hasCollected, toggleDrawer }: TrackCarouselProps) => {
+export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCollected, clearListenRecord, toggleDrawer }: TrackCarouselProps) => {
   return (
-    <Carousel id="carousel" className="w-full" opts={{ align: "center", "loop": true}}>
+    <Carousel id="track-carousel-wrap" className="w-full" opts={{ align: "center", "loop": true}}>
       <CarouselContent id="carousel-content">
         {tracks.map((currentTrack, index) => (
           <CarouselItem key={index} id="carousel-item" className="flex flex-col justify-center">
@@ -24,6 +27,7 @@ export const TrackCarousel = ({ tracks, onCollect, hasCollected, toggleDrawer }:
               track={currentTrack} 
               isMobile={true} 
               toggleDrawer={toggleDrawer}
+              onListen={() => onListen(currentTrack)}
             />
             {/* Claim Collectible */}
             {currentTrack.id !== 99 && ( 
@@ -31,8 +35,15 @@ export const TrackCarousel = ({ tracks, onCollect, hasCollected, toggleDrawer }:
                 track={currentTrack}
                 onCollect={() => onCollect(currentTrack)}
                 hasCollected={() => hasCollected(currentTrack.id)}
+                hasListened={() => hasListened(currentTrack.id)}
               />
             )}
+            {/* <p onClick={clearListenRecord} className="text-sm text-gray-400">clear</p>
+            {hasListened(currentTrack.id) && (
+              <div className="text-sm text-gray-400">
+                You have listened to this track!
+              </div>
+            )} */}
           </CarouselItem>
         ))}
       </CarouselContent>

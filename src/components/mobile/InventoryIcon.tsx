@@ -47,12 +47,11 @@ export const InventoryIcon = ({ tracks, show, hasCollected, onIconClick }: Inven
 
   return (
     <div className="relative flex flex-col items-center mb-2">
-      {/* Circle split into 4 parts */}
       <motion.div
         className={`w-12 h-12 rounded-full overflow-hidden cursor-pointer`}
         onClick={handleClick}
         whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.90 }}
         initial={{ opacity: 0, y: show ? 100 : 0 }}
         animate={{ opacity: 1, y: show ? 0 : 100 }}
         exit={{ opacity: 0, y: 100 }}
