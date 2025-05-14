@@ -5,7 +5,7 @@ interface InventoryDrawerProps {
   show: boolean;
   inventory: Track[];
   hasCollected: (trackId: number) => boolean;
-  clearInventory: () => void;
+  clearInventory?: () => void;
 }
 
 export const InventoryItem = ({ track, hasCollected }: { track: Track; hasCollected: (trackId: number) => boolean }) => {
@@ -32,7 +32,7 @@ export const InventoryItem = ({ track, hasCollected }: { track: Track; hasCollec
   );
 }
 
-export const InventoryDrawer = ({ show, inventory, hasCollected }: InventoryDrawerProps) => {
+export const InventoryDrawer = ({ show, inventory, hasCollected, clearInventory }: InventoryDrawerProps) => {
   // temp solution to hide the first inventory item, which was intended for the full project
   const inventoryMinusFirst = inventory.slice(1);
 
