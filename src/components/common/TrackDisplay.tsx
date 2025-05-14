@@ -4,6 +4,7 @@ import { useAudioPlayer } from "react-use-audio-player";
 import { Track } from '../../types';
 import { TrackInfoLinks } from './TrackInfoLinks';
 import { LinkIcon } from './LinkIcon';
+import { IconLinks } from '../../data/iconlinks';
 import { YouTube } from '../youtube';
 // import { ProgressBar } from '../ui/progress-bar';
 import { formatTime } from '@/utils/timeFormat';
@@ -207,28 +208,26 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
             </motion.h2>
           </div>
         )}
-        {/* Desktop - Full Album Only */}
+        {/* Desktop - All Tracks */}
         {!isMobile && track.id != 99 && (
-          <div className="grid grid-cols-3 gap-4">
-            <LinkIcon 
-              src="assets/images/icons/youtube.png" 
-              alt="youtube-link" 
-              href="https://youtube.com"
-              text="YouTube"
-            />
-            <LinkIcon 
-              src="public/assets/images/icons/youtube.png" 
-              alt="youtube-link" 
-              href="https://youtube.com"
-              text="YouTube"
-            />
-            <LinkIcon 
-              src="assets/images/icons/youtube.png" 
-              alt="youtube-link" 
-              href="https://youtube.com"
-              text="YouTube"
-            />
-          </div>
+         <motion.div
+            id="link-icon-container" 
+            className="md:grid md:grid-cols-3 md:gap-y-2 md:pt-4 md:pb-0 md:justify-items-start md:w-full"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {/* Add border on mobile if I want: rounded-lg py-8 px-4 border-solid border-[#80808040] */}
+            {IconLinks.map((link) => (
+              <LinkIcon 
+                key={link.id}
+                src={link.icon} 
+                alt={link.name} 
+                href={link.url} 
+                text={link.name.charAt(0).toUpperCase() + link.name.slice(1)} 
+                desktop />
+            ))}
+          </motion.div>
         )}
         {/* Mobile - Album Only */}
         {(track.id == 99) && (
