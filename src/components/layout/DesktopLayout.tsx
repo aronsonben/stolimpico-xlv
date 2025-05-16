@@ -20,7 +20,7 @@ export const DesktopLayout = () => {
           <div className="flex-1 max-w-[500px]">
             <motion.img
               src={albumArt}
-              alt="STOLIMPICO XIV Album Art"
+              alt="STOLIMPICO XLV Album Art"
               className="w-full rounded-lg shadow-xl"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
@@ -34,7 +34,7 @@ export const DesktopLayout = () => {
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              STOLIMPICO XIV
+              STOLIMPICO XLV
             </motion.h1>
 
             <TrackInfoLinks />

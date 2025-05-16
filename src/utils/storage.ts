@@ -100,7 +100,7 @@ export const storage = {
     return status;
   },
 
-  // Specific storage methods for STOLIMPICO XIV
+  // Specific storage methods for STOLIMPICO XLV
   preferences: {
     get: (): UserPreferences => {
       return storage.get<UserPreferences>(STORAGE_KEYS.USER_PREFERENCES) || {

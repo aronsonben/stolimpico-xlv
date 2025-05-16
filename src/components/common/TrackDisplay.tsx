@@ -212,13 +212,13 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
         {!isMobile && track.id != 99 && (
          <motion.div
             id="link-icon-container" 
-            className="md:grid md:grid-cols-3 md:gap-y-2 md:pt-4 md:pb-0 md:justify-items-start md:w-full"
+            className="md:grid md:grid-cols-2 md:gap-y-2 md:pb-0 md:justify-items-start md:w-full"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
             {/* Add border on mobile if I want: rounded-lg py-8 px-4 border-solid border-[#80808040] */}
-            {IconLinks.map((link) => (
+            {/* {IconLinks.map((link) => (
               <LinkIcon 
                 key={link.id}
                 src={link.icon} 
@@ -226,7 +226,20 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
                 href={link.url} 
                 text={link.name.charAt(0).toUpperCase() + link.name.slice(1)} 
                 desktop />
-            ))}
+            ))} */}
+            {['soundcloud', 'spotify', 'apple', 'bandcamp'].map((link) => {
+              const src = IconLinks.find((icon) => icon.name === link)?.icon || '/assets/images/icons/soundcloud.png';
+              const href = (track[link as keyof Track] as string) || '#';
+              return (
+                <LinkIcon
+                  key={track.title + link}
+                  src={src}
+                  alt={link}
+                  href={href}
+                  text={link.charAt(0).toUpperCase() + link.slice(1)}
+                  desktop
+                />
+            )})}
           </motion.div>
         )}
         {/* Mobile - Album Only */}
@@ -234,7 +247,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
           <TrackInfoLinks />
         )}
         {/* Mobile - All Tracks Except Album */}
-        {(track.id != 99) && (
+        {(isMobile && track.id != 99) && (
         <div id="mobile-title-text" className="w-full h-8 text-4xl text-center flex items-center justify-center font-bold font-sans scale-y-50 text-gray-100 uppercase">
           <h2>{track.title}</h2>
         </div>

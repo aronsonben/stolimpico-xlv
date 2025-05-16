@@ -18,7 +18,7 @@ function App() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <h1 className="text-2xl mb-4">STOLIMPICO XIV</h1>
+          <h1 className="text-2xl mb-4">STOLIMPICO XLV</h1>
           <div className="flex flex-col items-center">
             <motion.div
               className="w-32 h-1 bg-white rounded-full mb-2"

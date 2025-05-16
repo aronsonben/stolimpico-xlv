@@ -5,4 +5,8 @@ export interface Track {
   coverArt: string;
   collectibleImage: string;
   youtubeLink: string;
+  soundcloud: string;
+  spotify: string;
+  apple: string;
+  bandcamp: string;
 }
