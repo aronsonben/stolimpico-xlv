@@ -10,6 +10,7 @@ interface CollectProps {
   onCollect: (track: Track) => void;
   hasCollected: (trackId: number) => boolean;
   hasListened: () => boolean;
+  clearListenRecord?: () => void;
 }
 
 const StyledThumb = styled(Switch.Thumb)<{ $containerWidth: number }>`
@@ -27,7 +28,7 @@ const StyledThumb = styled(Switch.Thumb)<{ $containerWidth: number }>`
 	}
 `;
 
-export const Collect = ({ track, onCollect, hasCollected, hasListened }: CollectProps) => {
+export const Collect = ({ track, onCollect, hasCollected, hasListened, clearListenRecord }: CollectProps) => {
   const [text, setText] = useState(hasListened() ? (hasCollected(track.id) ? "claimed" : "tap to claim") : "listen to claim");
   const [containerWidth, setContainerWidth] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -97,6 +98,11 @@ export const Collect = ({ track, onCollect, hasCollected, hasListened }: Collect
             </AnimatePresence>
         </Switch.Root>
       </div>
+      {process.env.NODE_ENV === 'development' && (
+        <button onClick={clearListenRecord} className="text-white text-xs bg-slate-400">
+          Clear Inventory
+        </button>
+      )}
     </div>
   );
 };

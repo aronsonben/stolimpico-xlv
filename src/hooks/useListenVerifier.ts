@@ -23,12 +23,14 @@ export const useListenVerifier = () => {
       localStorage.setItem('stolimpico-listened', JSON.stringify(initialTracks));
       return initialTracks;
     }
+    console.log("[useListenVerifier] WE FOUND THAT THE TRACK HAS BEEN LISTENED TO: ", saved);
     // TODO: should prob not just reeturn empty array but do some handling
     return saved ? JSON.parse(saved) : [];
   });
 
   /** Updates localStorage whenever listenedTracks changes */
   useEffect(() => {
+    console.log("[useListenVerifier] UPDATING STATE WITH NEW LISTENED TRACKS: ", listenedTracks);
     localStorage.setItem('stolimpico-listened', JSON.stringify(listenedTracks));
   }, [listenedTracks]);
 
@@ -37,6 +39,7 @@ export const useListenVerifier = () => {
 
   /** Marks a new track to the inventory as being listened to */
   const markListened = (track: Track) => {
+    console.log("[useListenVerifier] WE ARE MARKING THIS TRACK AS LISTENED: ", track.title);
     setListenedTracks(prev =>
       prev.map(item =>
         item.trackId === track.id

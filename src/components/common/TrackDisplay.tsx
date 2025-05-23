@@ -84,6 +84,7 @@ export const TrackDisplay = ({ track, isMobile, toggleDrawer, onListen }: TrackD
   }
 
   const handleOverlayClick = () => {
+    console.log("[TrackDisplay] OVERLAY CLICKED");
     handleRecordPlayClick(); // Call the function to mark the track as listened
     setOverlayActive(false); // Disable the overlay after the first click
 

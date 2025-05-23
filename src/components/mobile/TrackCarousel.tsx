@@ -17,7 +17,7 @@ interface TrackCarouselProps {
   toggleDrawer: () => void;
 }
 
-export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCollected, toggleDrawer }: TrackCarouselProps) => {
+export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCollected, clearListenRecord, toggleDrawer }: TrackCarouselProps) => {
   return (
     <Carousel id="track-carousel-wrap" className="w-full" opts={{ align: "center", "loop": true}}>
       <CarouselContent id="carousel-content">
@@ -36,6 +36,7 @@ export const TrackCarousel = ({ tracks, onListen, onCollect, hasListened, hasCol
                 onCollect={() => onCollect(currentTrack)}
                 hasCollected={() => hasCollected(currentTrack.id)}
                 hasListened={() => hasListened(currentTrack.id)}
+                clearListenRecord={clearListenRecord}
               />
             )}
             {/* <p onClick={clearListenRecord} className="text-sm text-gray-400">clear</p>
